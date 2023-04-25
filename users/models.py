@@ -38,9 +38,9 @@ class CustomUser(AbstractBaseUser):
         ('남', 'Man'),
         ('여', 'Woman'),
         )
-    gender = models.CharField(choices="gender_check", max_length=1)
+    gender = models.CharField(choices=gender_check, max_length=1)
     age = models.CharField(max_length=20)
-    bio = models.CharField(max_length=300, blank=True, TextInput='반가워요')
+    bio = models.CharField(max_length=300, blank=True)
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
