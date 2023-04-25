@@ -8,10 +8,19 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        return super().create(validated_data)
+        user = super().create(validated_data)
+        password = user.password
+        user.set_password(password)
+        user.save()
+        return user
     
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
+    def update(self, validated_data):
+        user = super().create(validated_data)
+        password = user.password
+        user.set_password(password)
+        user.save()
+        return user
+    
     
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):

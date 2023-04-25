@@ -34,11 +34,12 @@ class CustomUser(AbstractBaseUser):
         unique=True,
     )
     username = models.CharField(max_length=20)
-    gender_check = (
-        ('남', 'Man'),
-        ('여', 'Woman'),
-        )
-    gender = models.CharField(choices=gender_check, max_length=1)
+    # gender_check = (
+    #     ('Man', 'Man'),
+    #     ('Woman', 'Woman'),
+    #     )
+    # gender = models.CharField(choices=gender_check, max_length=1)
+    gender = models.CharField(max_length=5)
     age = models.CharField(max_length=20)
     bio = models.CharField(max_length=300, blank=True)
 
