@@ -5,7 +5,11 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = '__all__'
+        fields = ['id', 'username', 'email', 'password', 'gender', 'age', 'bio']
+        read_only_fields = ('email') #수정 불가능하도록 read-only로 설정
+        extra_kwargs = {
+            'password' : {'write_only' : True}
+        }
 
     def create(self, validated_data):
         user = super().create(validated_data)
@@ -14,12 +18,13 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
     
-    def update(self, validated_data):
-        user = super().create(validated_data)
+    def update(self, instance, validated_data):
+        user = super().update(instance, validated_data)
         password = user.password
         user.set_password(password)
         user.save()
         return user
+
     
     
 
