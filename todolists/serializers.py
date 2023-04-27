@@ -4,10 +4,10 @@ from .models import ToDoList
 class ToDoListSerializer(serializers.ModelSerializer):
     class Meta:
         model = ToDoList
-        fields = ['id', 'title']
+        fields = ['id','content', 'created_date', 'is_completed']
 
-    def create(self, validated_data):
-        return super().create(validated_data)
-    
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
+
+class ToDoListCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ToDoList
+        fields = ['content',]

@@ -6,7 +6,6 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'email', 'password', 'gender', 'age', 'bio']
-        read_only_fields = ('email') #수정 불가능하도록 read-only로 설정
         extra_kwargs = {
             'password' : {'write_only' : True}
         }
@@ -18,6 +17,16 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
     
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'email', 'username', 'password', 'gender', 'age', 'bio']
+        read_only_fields = ('id','email') #수정 불가능하도록 read-only로 설정
+        extra_kwargs = {
+            'password' : {'write_only' : True}
+        }
+
     def update(self, instance, validated_data):
         user = super().update(instance, validated_data)
         password = user.password
@@ -25,8 +34,6 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-    
-    
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod

@@ -7,6 +7,7 @@ from users import views
 
 urlpatterns = [
     path('signup/', views.UserView.as_view(), name='signup'),
+    path('profile/', views.UserProfileView.as_view(), name='profile_view'),
     path('mock/', views.mockView.as_view(), name = 'mock'),
     #access token 발급 = login
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
