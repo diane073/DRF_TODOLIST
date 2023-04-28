@@ -22,26 +22,25 @@ class UserView(APIView):
     
 
 class UserProfileView(APIView):
+    permission_class = [permissions.IsAuthenticated]
+    #login한 유저인지 먼저 확인
+
     def get(self, request, user_id):
-        #login한 유저인지 먼저 확인
         user = get_object_or_404(CustomUser, id=user_id)
-        print(user)
-        print(request.user)
         serializer = UserProfileSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
 
     @csrf_exempt
     def put(self, request, user_id):
         user = get_object_or_404(CustomUser, id=user_id)  #user 데이터 가져와주기
-        
         print(request.user)
         print(user)
+        current_user = request.user
 
-        if user.id == request.user.id:  #요청유저와 유저데이터 id 일치 여부 검사
+        if user.id == current_user.id:  #요청유저와 유저데이터 id 일치 여부 검사
+            serializer = UserProfileSerializer(user, data=request.data)
             if serializer.is_valid():
-                serializer = UserProfileSerializer(user, data=request.data)
-                serializer.save(user=request.user)
+                serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -49,14 +48,13 @@ class UserProfileView(APIView):
             return Response({'message':"권한이 없습니다"}, status=status.HTTP_403_FORBIDDEN)
 
 
-    def delete(self, request):
-        serializer = UserSerializer(data=request.data)
-        serializer.delete()
-        return Response({'message':'회원 탈퇴 완료'}, status=status.HTTP_201_CREATED)
-
-
-
-
+    def delete(self, request, user_id):
+        user = get_object_or_404(CustomUser, id=user_id)  #user 데이터 가져와주기
+        if user == request.user:
+            user.delete()
+            return Response({'message':'회원 탈퇴 완료'}, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response({'message':"권한이 없습니다"}, status=status.HTTP_403_FORBIDDEN)
 
 
 

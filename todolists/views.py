@@ -24,6 +24,14 @@ class ToDoListView(APIView):
 
 
 class ToDoListDetailView(APIView):
+    def post(self, request, todolist_id):
+        todo = get_object_or_404(ToDoList, id=todolist_id)
+        if todo.is_completed == True:
+            todo.update(completion_at = todo.completion_at)
+            return Response(todo.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
     def put(self, request, todolist_id):
         todo = get_object_or_404(ToDoList, id=todolist_id)
         if request.user == todo.user:

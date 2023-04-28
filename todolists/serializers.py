@@ -4,7 +4,7 @@ from .models import ToDoList
 class ToDoListSerializer(serializers.ModelSerializer):
     class Meta:
         model = ToDoList
-        fields = ['id','content', 'created_date', 'is_completed']
+        fields = ['id','content', 'created_date', 'is_completed', 'completion_at',]
 
 
 class ToDoListCreateSerializer(serializers.ModelSerializer):
